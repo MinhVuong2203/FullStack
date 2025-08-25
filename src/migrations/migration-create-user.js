@@ -8,6 +8,17 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+
+    //    email: DataTypes.STRING,
+    // password: DataTypes.STRING,
+    // firstName: DataTypes.STRING,
+    // lastName: DataTypes.STRING,
+    // address: DataTypes.STRING,
+    // phonenumber: DataTypes.STRING,
+    // gender: DataTypes.BOOLEAN,
+    // image: DataTypes.STRING,
+    // roleId: DataTypes.STRING,
+    // positionId: DataTypes.STRING
       email: {
         type: Sequelize.STRING
       },
@@ -23,13 +34,19 @@ module.exports = {
       address: {
         type: Sequelize.STRING
       },
+      phonenumber: {
+        type: Sequelize.STRING
+      },
       gender: {
         type: Sequelize.BOOLEAN
       },
-      typeRole: {
+      image: {
         type: Sequelize.STRING
       },
-      keyRole: {
+      roleId: {
+        type: Sequelize.STRING
+      },
+      positionId: {
         type: Sequelize.STRING
       },
       createdAt: {
