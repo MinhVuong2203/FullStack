@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import db from '../models/index';
+import e from "express";
 
 const salt = bcrypt.genSaltSync(10);
 
@@ -7,7 +8,7 @@ let createNewUser = async (data) => {
     return new Promise(async (resolve, reject) => {
         try {
             let hashPasswordFromBcrypt = await hashUserPassword(data.password);
-            await db.User.create({    // db là database trên server đã được import ở trên, User là tên bảng được viết trong model
+            await db.User.create({    // db là database trên server đã được import ở trên, User là tên bảng được viết trong model, đây là cú pháp ORM (Object Relational Mapping) thuộc trên Modal Instance của thư viện Sequelize
                 email: data.email,
                 password: hashPasswordFromBcrypt,
                 firstName: data.firstName,
@@ -36,6 +37,53 @@ let hashUserPassword = (password) => {
         }
     })
 }
+
+let getAllUsers = () =>{
+    return new Promise((resolve, reject) => {
+        try {
+            let users = db.User.findAll( { raw: true }); // raw: true để hiển thị trên console đẹp thôi
+            resolve(users);
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
+let getUserInfoById = (userId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let user = await db.User.findOne({ where: {id: userId}, raw: true});
+            user ? resolve(user) : reject({});
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
+let updateUser = (data) => {
+    return new Promise(async (resolve, reject) =>{
+        try {
+            let user = await db.User.findOne({ // user này là user cũ dưới database, data là user mới trên FE
+                where: {id: data.id}
+            })
+            if (user){
+                user.firstName = data.firstName;
+                user.lastName = data.lastName;
+                user.address = data.address;
+                user.phonenumber = data.phonenumber;
+                await user.save();
+                resolve(user);
+            } else {
+                resolve();
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
 module.exports = {
-    createNewUser: createNewUser
+    createNewUser: createNewUser,
+    getAllUsers: getAllUsers,
+    getUserInfoById: getUserInfoById,
+    updateUser: updateUser
 };
