@@ -18,7 +18,7 @@ let getCrudPage = async (req, res) => {
     } catch (e) {
         console.log(e);
     }
-};
+}; 
 
 let postCrudPage = async (req, res) => {
     let message = await CRUDService.createNewUser(req.body);
@@ -54,6 +54,20 @@ let putCrud = async (req, res) => {
     });
 }
 
+let deleteCrud = async (req, res) => {
+    let id = req.query.id;
+    console.log('id = ' + id);
+    if (id) {
+        await CRUDService.deleteUserById(id);
+        return res.render('displayCRUD.ejs', {
+            dataTable : await CRUDService.getAllUsers() // đặt lại data để render ra data mới
+        });
+    } else {
+        return res.send('User not found!');
+    }
+
+}
+
 // Do file này nhiều controller khác
 // module.exports ra một object điểm khác biệt so với blog là sử dụng class, này thì không
 module.exports = {
@@ -62,5 +76,6 @@ module.exports = {
     postCrudPage: postCrudPage,
     displayGetCrud: displayGetCrud,
     getEditCrud: getEditCrud,
-    putCrud: putCrud
+    putCrud: putCrud,
+    deleteCrud: deleteCrud
 };

@@ -81,9 +81,21 @@ let updateUser = (data) => {
         }
     })
 }
+
+let deleteUserById = (userId) =>{
+    return new Promise(async (resolve, reject) => {
+        try {
+            await db.User.destroy({ where: { id: userId } });
+            resolve();
+        } catch (error) {
+            reject(error);  // Thực tế tất cả những gì try catch khi có lỗi thì sẽ thông báo lỗi ra cho người dùng biết, bài học này đơn giản nên chỉ như này thôi
+        }
+    })
+}
 module.exports = {
     createNewUser: createNewUser,
     getAllUsers: getAllUsers,
     getUserInfoById: getUserInfoById,
-    updateUser: updateUser
+    updateUser: updateUser,
+    deleteUserById: deleteUserById
 };
